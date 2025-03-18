@@ -19,15 +19,15 @@ public class RegistrationRequest {
     @NotEmpty(message = "First name is mandatory")
     @NotBlank(message = "First name is mandatory")
     private String firstname;
-    @NotEmpty(message = "First name is mandatory")
-    @NotBlank(message = "First name is mandatory")
+    @NotEmpty(message = "Last name is mandatory")
+    @NotBlank(message = "Last name is mandatory")
     private String lastname;
-    @NotEmpty(message = "First name is mandatory")
-    @NotBlank(message = "First name is mandatory")
+    @NotEmpty(message = "Email address is mandatory")
+    @NotBlank(message = "Email address is mandatory")
     @Email(message = "Email not well formated")
     private String email;
-    @NotEmpty(message = "First name is mandatory")
-    @NotBlank(message = "First name is mandatory")
+    @NotEmpty(message = "Password is mandatory")
+    @NotBlank(message = "Password is mandatory")
     @Size(min = 8, message ="Password should be 8 characters long at least")
     private String password;
 
