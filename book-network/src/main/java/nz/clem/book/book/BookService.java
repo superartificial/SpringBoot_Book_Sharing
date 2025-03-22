@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import nz.clem.book.common.PageResponse;
 import nz.clem.book.exception.OperationNotPermittedException;
+import nz.clem.book.file.FileStorageService;
 import nz.clem.book.history.BookTransactionHistory;
 import nz.clem.book.history.BookTransactionHistoryRepository;
 import nz.clem.book.user.User;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +28,7 @@ import static nz.clem.book.book.BookSpecification.*;
 @RequiredArgsConstructor
 public class BookService {
 
+    private final FileStorageService fileStorageService;
     private final BookRespository bookRespository;
     private final BookTransactionHistoryRepository transactionHistoryRepository;
     private final BookMapper bookMapper;
@@ -193,5 +197,14 @@ public class BookService {
                 .orElseThrow(() -> new OperationNotPermittedException("Return approval failed because the book has not been returned."));
         bookTransactionHistory.setReturnApproved(true);
         return transactionHistoryRepository.save(bookTransactionHistory).getId();
+    }
+
+    public void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
+        User user = ((User) connectedUser.getPrincipal());
+        Book book = bookRespository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + bookId));
+        var bookCover = fileStorageService.saveFile(file, user.getId());
+        book.setBookCover(bookCover);
+        bookRespository.save(book);
     }
 }
