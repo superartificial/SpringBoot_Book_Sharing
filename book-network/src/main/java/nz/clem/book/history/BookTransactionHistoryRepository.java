@@ -1,13 +1,10 @@
 package nz.clem.book.history;
 
-
-import nz.clem.book.book.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
+import java.util.Optional;
 
 public interface BookTransactionHistoryRepository extends JpaRepository<BookTransactionHistory,Integer> {
 
@@ -24,4 +21,24 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
             WHERE history.book.owner.id = :userId
             """)
     Page<BookTransactionHistory> findAllReturnedBooks(Pageable pageable, Integer userId);
+
+    @Query("""
+            SELECT
+            (COUNT(*) < 0) AS isBorrowed
+            FROM BookTransactionHistory history
+            WHERE history.user.id = :userId            
+            AND history.returnApproved = false
+            AND history.book_id = :bookId
+            """)
+    boolean isAlreadyBorrowedByUser(Integer bookId, Integer userId);
+
+    @Query("""
+            SELECT history
+            FROM BookTransactionHistory history
+            WHERE history.book.owner.id = :userId
+            AND history.book_id = :bookId
+            AND transaction.returned = false
+            AND transaction.returnApproved = false
+            """)
+    Optional<BookTransactionHistory> findByBookIdAndUserId(Integer bookId, Integer userId);
 }
