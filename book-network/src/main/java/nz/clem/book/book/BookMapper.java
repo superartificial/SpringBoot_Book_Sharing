@@ -1,5 +1,6 @@
 package nz.clem.book.book;
 
+import nz.clem.book.file.FileUtils;
 import nz.clem.book.history.BookTransactionHistory;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isSharable())
                 .owner(book.getOwner().fullName())
+                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
                 .build();
     }
 
