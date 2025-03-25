@@ -19,8 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Book extends BaseEntity
-{
+public class Book extends BaseEntity {
     private String title;
     private String authorName;
     private String isnb;
@@ -30,7 +29,7 @@ public class Book extends BaseEntity
     private boolean sharable;
 
     @ManyToOne
-    @JoinColumn(name="owner_id") // optional, Hibernate will use this name by default
+    @JoinColumn(name = "owner_id") // optional, Hibernate will use this name by default
     private User owner;
 
     @OneToMany(mappedBy = "book")
@@ -41,11 +40,11 @@ public class Book extends BaseEntity
 
     @Transient
     public double getRate() {
-        if(feedbacks==null || feedbacks.isEmpty()) {
+        if (feedbacks == null || feedbacks.isEmpty()) {
             return 0.0;
         }
         var rate = this.feedbacks.stream()
-                .mapToDouble(Feedback::getNote)
+                .mapToDouble(feedback -> feedback.getNote() != null ? feedback.getNote() : 0.0)
                 .average()
                 .orElse(0.0);
         double roundedRate = Math.round(rate * 10.0) / 10.0;

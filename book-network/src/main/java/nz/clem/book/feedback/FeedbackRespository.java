@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface FeedbackRespository extends JpaRepository<Feedback, Integer> {
 
     @Query("""
-            SELECT * FROM Feedback
-            WHERE book_id = bookId
+            SELECT f FROM Feedback f
+            WHERE f.book.id = :bookId
             """)
     Page<Feedback> findAllFeedbacksByBook(Pageable pageable, Integer bookId);
 }

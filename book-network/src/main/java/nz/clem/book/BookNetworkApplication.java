@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableJpaRepositories
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableAsync
 public class BookNetworkApplication {
@@ -21,10 +23,9 @@ public class BookNetworkApplication {
 	@Bean
 	public CommandLineRunner runner(RoleRespository roleRespository) {
 		return args -> {
-			if(roleRespository.findByName("USER").isEmpty()) {
+			if (roleRespository.findByName("USER").isEmpty()) {
 				roleRespository.save(
-						Role.builder().name("USER").build()
-				);
+						Role.builder().name("USER").build());
 			}
 		};
 	}
