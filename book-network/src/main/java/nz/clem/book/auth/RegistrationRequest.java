@@ -16,8 +16,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class RegistrationRequest {
 
     @NotEmpty(message = "First name is mandatory")
