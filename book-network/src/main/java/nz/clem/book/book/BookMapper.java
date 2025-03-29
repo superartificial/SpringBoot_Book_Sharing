@@ -21,6 +21,7 @@ public class BookMapper {
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
+                .isbn(book.getIsnb())
                 .authorName(book.getAuthorName())
                 .synopsis(book.getSynopsis())
                 .rate(book.getRate())
